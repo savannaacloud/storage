@@ -39,7 +39,7 @@ output "file_storage_mount_path" {
 }
 
 output "keypair_private_key" {
-  description = "PEM key for SSH to the demo VM. Returned once — `terraform output -raw keypair_private_key > ~/.ssh/${var.prefix}.pem`."
+  description = "PEM key for SSH to the demo VM. Returned once — `terraform output -raw keypair_private_key > ~/.ssh/<prefix>.pem`."
   value       = sws_keypair.demo.private_key
   sensitive   = true
 }
