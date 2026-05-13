@@ -10,6 +10,12 @@ variable "region" {
   default     = "ng-abuja-1"
 }
 
+variable "ssh_public_key_file" {
+  description = "Path to an existing SSH public key file. sws_keypair takes a public_key string (BYO key, like AWS)."
+  type        = string
+  default     = "~/.ssh/id_rsa.pub"
+}
+
 variable "image_name" {
   description = "OS image to look up via data.sws_image. Used as the volume_attachment demo target."
   type        = string

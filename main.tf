@@ -24,15 +24,17 @@ resource "sws_volume" "data" {
 
 # Demo instance the volume attaches to. Tiny + cheap so the example is fast.
 resource "sws_keypair" "demo" {
-  name = "${local.prefix}-key"
+  name       = "${local.prefix}-key"
+  public_key = file(pathexpand(var.ssh_public_key_file))
 }
 
 resource "sws_instance" "vm" {
-  name        = "${local.prefix}-vm"
-  flavor_name = "m1.small"
-  image_name  = var.image_name
-  network_id  = var.network_id
-  key_name    = sws_keypair.demo.name
+  name       = "${local.prefix}-vm"
+  plan       = "m1.small"
+  image      = var.image_name
+  network_id = var.network_id
+  keypair    = sws_keypair.demo.name
+  public_ip  = true
 }
 
 resource "sws_volume_attachment" "data" {
