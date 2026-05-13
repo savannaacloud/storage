@@ -7,6 +7,8 @@ locals {
 # pick one by name. data.sws_image gives you the id you'll need on the
 # instance + on the boot volume.
 
+data "sws_network" "default" { name = var.network_name }
+
 data "sws_image" "ubuntu" {
   name = var.image_name
 }
@@ -32,7 +34,7 @@ resource "sws_instance" "vm" {
   name       = "${local.prefix}-vm"
   plan       = "m1.small"
   image      = data.sws_image.ubuntu.id
-  network_id = var.network_id
+  network_id = data.sws_network.default.id
   keypair    = sws_keypair.demo.name
   public_ip  = true
 }
@@ -89,7 +91,7 @@ resource "sws_file_storage" "shared" {
   config = jsonencode({
     size_gb         = var.file_storage_size_gb
     protocol        = "NFS"
-    network_id      = var.network_id
+    network_id      = data.sws_network.default.id
   })
 }
 

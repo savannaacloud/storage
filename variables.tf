@@ -40,9 +40,10 @@ variable "snapshot_after_create" {
   default     = true
 }
 
-variable "network_id" {
-  description = "Network ID for the demo instance that mounts the volume. (Storage objects themselves are region-scoped, not network-scoped.)"
+variable "network_name" {
+  description = "Name of an existing network for the demo VM (defaults to 'default' — auto-created at signup)."
   type        = string
+  default     = "default"
 }
 
 variable "object_buckets" {

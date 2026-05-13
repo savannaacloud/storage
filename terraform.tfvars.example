@@ -7,8 +7,7 @@ volume_size_gb         = 20
 volume_type            = "gp-ssd"          # gp-ssd | io-ssd | hdd (region-dependent)
 snapshot_after_create  = true
 
-# Required: existing network ID (for the demo VM that mounts the volume)
-network_id             = "REPLACE_WITH_YOUR_NETWORK_ID"
+# network_name = "default"   # uncomment to override the auto-lookup
 
 # Object Storage — bucket names (final names will be "${prefix}-${name}")
 object_buckets         = ["assets", "logs", "backups"]
