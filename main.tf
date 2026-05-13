@@ -31,7 +31,7 @@ resource "sws_keypair" "demo" {
 resource "sws_instance" "vm" {
   name       = "${local.prefix}-vm"
   plan       = "m1.small"
-  image      = var.image_name
+  image      = data.sws_image.ubuntu.id
   network_id = var.network_id
   keypair    = sws_keypair.demo.name
   public_ip  = true
