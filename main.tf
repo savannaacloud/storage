@@ -53,6 +53,9 @@ resource "sws_volume_snapshot" "data" {
 
   name      = "${local.prefix}-data-snap1"
   volume_id = sws_volume.data.id
+  force     = true # volume is in-use after attachment; force tells Cinder to snapshot anyway (crash-consistent)
+
+  depends_on = [sws_volume_attachment.data]
 }
 
 # ── Backups (policy) ───────────────────────────────────────────────────────
