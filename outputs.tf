@@ -35,10 +35,14 @@ output "file_storage_id" {
   value       = try(sws_file_storage.shared[0].id, null)
 }
 
-output "keypair_private_key" {
-  description = "PEM key for SSH to the demo VM. Returned once — `terraform output -raw keypair_private_key > ~/.ssh/savannaa-demo.pem`."
-  value       = sws_keypair.demo.private_key
-  sensitive   = true
+output "keypair_name" {
+  description = "Keypair Nova injects into the demo VM. SSH using the private half of the public key you passed via var.ssh_public_key_file."
+  value       = sws_keypair.demo.name
+}
+
+output "keypair_fingerprint" {
+  description = "MD5 fingerprint Nova returned for the registered public key."
+  value       = sws_keypair.demo.fingerprint
 }
 
 output "vm_id" {

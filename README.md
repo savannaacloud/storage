@@ -76,23 +76,18 @@ terraform apply
 
 Type `yes`. Apply takes ~90 s on a warm region (image already pulled), up to 4 min on first run.
 
-### 7. Capture the private key (only once!)
+### 7. Verify the volume is mounted inside the VM
+
+You supplied the public key (via `var.ssh_public_key_file`, default `~/.ssh/id_rsa.pub`), so use the matching private half on your laptop. Pull the VM's public IP from the console (or `terraform output -raw vm_id` to look it up):
 
 ```bash
-terraform output -raw keypair_private_key > ~/.ssh/storage-demo.pem
-chmod 600 ~/.ssh/storage-demo.pem
-```
-
-### 8. Verify the volume is mounted inside the VM
-
-```bash
-ssh -i ~/.ssh/storage-demo.pem ubuntu@$(terraform output -raw vm_id)   # use the public IP from the console
+ssh -i ~/.ssh/id_rsa ubuntu@<public-ip-from-console>
 sudo lsblk                              # /dev/vdb should be 20 GiB
 sudo mkfs.ext4 /dev/vdb && sudo mkdir -p /mnt/data && sudo mount /dev/vdb /mnt/data
 df -h /mnt/data
 ```
 
-### 9. Try the object storage
+### 8. Try the object storage
 
 ```bash
 export AWS_ACCESS_KEY_ID="$SWS_API_KEY"
@@ -103,7 +98,7 @@ aws s3 ls
 aws s3 cp /etc/hostname s3://$(terraform output -json object_bucket_names | jq -r '.[0]')/hello.txt
 ```
 
-### 10. Mount the file share
+### 9. Mount the file share
 
 The provider returns the share `id`; the live NFS mount address is rendered in the console (Storage → File Storage → click the share) or via `GET /api/storage/file-storage/<id>`. Copy that address into the mount command below.
 
@@ -116,7 +111,7 @@ sudo mount -t nfs <nfs-address>:/ /mnt/shared
 echo "shared from $(hostname)" | sudo tee /mnt/shared/test.txt
 ```
 
-### 11. Tear down
+### 10. Tear down
 
 ```bash
 terraform destroy
