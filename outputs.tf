@@ -30,12 +30,15 @@ output "object_endpoint" {
   value       = "https://${var.region == "ng-abuja-1" ? "abuja" : "lagos"}.objects.savannaa.com"
 }
 
-output "file_storage_mount_path" {
-  description = "Sample mount command. Replace /mnt/shared with wherever you want."
-  value = try(
-    "mount -t nfs ${sws_file_storage.shared[0].mount_target}:/ /mnt/shared",
-    "(file storage disabled — set enable_file_storage=true)"
-  )
+output "file_storage_id" {
+  description = "File share id. Grab the NFS mount address from the console — Storage → File Storage → this id — or via the API: GET /api/storage/file-storage/<id>."
+  value       = try(sws_file_storage.shared[0].id, null)
+}
+
+output "keypair_private_key" {
+  description = "PEM key for SSH to the demo VM. Returned once — `terraform output -raw keypair_private_key > ~/.ssh/savannaa-demo.pem`."
+  value       = sws_keypair.demo.private_key
+  sensitive   = true
 }
 
 output "vm_id" {

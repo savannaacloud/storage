@@ -105,12 +105,14 @@ aws s3 cp /etc/hostname s3://$(terraform output -json object_bucket_names | jq -
 
 ### 10. Mount the file share
 
-On the demo VM (or any other VM in the same project):
+The provider returns the share `id`; the live NFS mount address is rendered in the console (Storage → File Storage → click the share) or via `GET /api/storage/file-storage/<id>`. Copy that address into the mount command below.
 
 ```bash
 sudo apt-get install -y nfs-common
 sudo mkdir -p /mnt/shared
-sudo $(terraform output -raw file_storage_mount_path)
+SHARE_ID=$(terraform output -raw file_storage_id)
+# Visit https://savannaa.com/storage/file-storage/$SHARE_ID and copy the NFS address.
+sudo mount -t nfs <nfs-address>:/ /mnt/shared
 echo "shared from $(hostname)" | sudo tee /mnt/shared/test.txt
 ```
 
